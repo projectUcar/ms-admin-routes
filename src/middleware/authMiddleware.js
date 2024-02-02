@@ -1,24 +1,37 @@
-import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv';
+import axios from 'axios';
+import { AUTH_MS_URL } from '../config';
 
-dotenv.config();
+export const authenticateUser = async (req, res, next) => {
+  const token = req.headers.authorization;
 
-const SECRET_KEY = process.env.SECRET_KEY;
-
-export const authenticateUser = (req, res, next) => {
-  const authorizationHeader = req.get('Authorization');
-
-  if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
-    return res.status(401).json({ error: 'Token de autorización no proporcionado' });
+  if (!token) {
+    return res.status(401).json({ error: 'Token no proporcionado' });
   }
 
-  const token = authorizationHeader.substring(7);
-
   try {
-    const decodedToken = jwt.verify(token, SECRET_KEY);
-    req.userId = decodedToken.userId; // Agrega el ID de usuario a la solicitud
-    next();
+    const response = await axios.get(`${AUTH_MS_URL}`, {
+      headers: {
+        Authorization: token,
+      },
+    });
+
+    if (response.data) {
+      req.user = response.data;
+      console.log(req.user);
+      next();
+    } else {
+      res.status(401).json({ error: 'Token inválido' });
+    }
   } catch (error) {
-    return res.status(401).json({ error: 'Token de autorización inválido' });
+    if (error.response) {
+      const statusCode = error.response.status;
+      if (statusCode === 401) {
+        return res.status(401).json({ error: 'Token inválido' });
+      }
+      return res.status(statusCode).json({ error: 'Error inesperado' });
+    }
+
+    console.error(error);
+    res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
