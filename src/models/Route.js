@@ -29,9 +29,9 @@ const routeSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
-    driverUserId: { 
-        type: String, 
-        required: true 
+    driverUserId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
     },
     passengers: [
         {
