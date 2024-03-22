@@ -19,8 +19,8 @@ app.use(express.urlencoded({ extended: false }));
 app.set("json spaces", 4);
 
 //TODO: add endpoints to express
-app.use('/api', indexRoutes)
-app.use('/api/routes', routeRoutes)
+app.use('/api/v1', indexRoutes)
+app.use('/api/v1/routes', routeRoutes)
 
 
 export default app;

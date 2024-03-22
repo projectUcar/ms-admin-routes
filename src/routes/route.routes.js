@@ -1,8 +1,8 @@
-import express from 'express';
+import {Router} from 'express'
 import { createRoute, getRoutes } from '../controllers/route.controller';
 import { authenticateUser } from '../middleware/authMiddleware';
 
-const router = express.Router();
+const router = Router();
 
 // Rutas protegidas por autenticación
 router.post('/create-route', authenticateUser, createRoute);

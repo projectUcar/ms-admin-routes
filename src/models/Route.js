@@ -9,6 +9,10 @@ const routeSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    city: {
+        type: String,
+        required: true,
+    },
     description: {
         type: String,
         required: true,
@@ -47,7 +51,6 @@ const routeSchema = new mongoose.Schema({
         enum: ['created', 'saved', 'closed', 'modified', 'deleted', 'expired'],
         default: 'created',
     },
-    // Otros campos que consideres necesarios
 },
     {
         timestamps: true,
