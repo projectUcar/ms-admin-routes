@@ -9,6 +9,10 @@ const routeSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    city: {
+        type: String,
+        required: true,
+    },
     description: {
         type: String,
         required: true,
@@ -25,9 +29,9 @@ const routeSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
-    driverUserId: { 
-        type: String, 
-        required: true 
+    driverUserId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
     },
     passengers: [
         {
@@ -47,7 +51,6 @@ const routeSchema = new mongoose.Schema({
         enum: ['created', 'saved', 'closed', 'modified', 'deleted', 'expired'],
         default: 'created',
     },
-    // Otros campos que consideres necesarios
 },
     {
         timestamps: true,
