@@ -16,8 +16,7 @@ export const authenticateUser = async (req, res, next) => {
     });
 
     if (response.data) {
-      req.user = response.data;
-      console.log(req.user);
+      req.user = response.data.user;
       next();
     } else {
       res.status(401).json({ error: 'Token inválido' });

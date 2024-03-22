@@ -1,4 +1,5 @@
 import Route from '../models/Route';
+import { getUserById } from '../libs/userService';
 
 export const createRoute = async (req, res) => {
   try {
@@ -19,7 +20,7 @@ export const createRoute = async (req, res) => {
 
 
     const savedRoute = await newRoute.save();
-    res.status(201).json({savedRoute, meessage: "¡Ruta creada exitosamente!"});
+    res.status(201).json({ savedRoute, meessage: "¡Ruta creada exitosamente!" });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error interno del servidor' });
@@ -28,8 +29,18 @@ export const createRoute = async (req, res) => {
 
 export const getRoutes = async (req, res) => {
   try {
-    const routes = await Route.find().populate('driverUserId', 'firstName lastName');
-    res.json(routes);
+    const token = req.headers.authorization;
+    const routes = await Route.find();
+
+    const routesWithDriverName = await Promise.all(routes.map(async route => {
+      const driver = await getUserById(route.driverUserId, token);
+      const driverName = driver ? `${driver.firstName} ${driver.lastName}` : 'Conductor no encontrado';
+      const modifiedRoute = { ...route.toObject() };
+      modifiedRoute.driverName = driverName;
+      return modifiedRoute;
+    }));
+
+    res.json(routesWithDriverName);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error interno del servidor' });
