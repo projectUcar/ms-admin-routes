@@ -20,7 +20,7 @@ app.set("json spaces", 4);
 
 //TODO: add endpoints to express
 app.use('/api/v1', indexRoutes)
-app.use('/api/v1/routes', routeRoutes)
+app.use('/api/v1/routes-from-university', routeRoutes)
 
 
 export default app;

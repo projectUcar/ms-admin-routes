@@ -29,6 +29,11 @@ const routeSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
+    vehicleId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Vehicle',
+        required: true,
+    },
     driverUserId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
