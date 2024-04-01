@@ -1,5 +1,5 @@
 import {Router} from 'express'
-import { createRoute, getAllRoutes, findRoutesByCity, getRoutePropertiesFromUniversity } from '../controllers/route.controller';
+import { createRoute, getAllRoutes, findRoutesByCity, getRoutePropertiesFromUniversity } from '../controllers/routeToUniversity.controller';
 import { authenticateUser } from '../middleware/authMiddleware';
 
 const router = Router();

@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 const routeFromUniversitySchema = new mongoose.Schema({
     origin: {
         type: String,
-        required: true,
+        default: 'Universidad Pontificia Bolivariana',
     },
     destination: {
         type: String,
@@ -28,6 +28,7 @@ const routeFromUniversitySchema = new mongoose.Schema({
     availableSeats: {
         type: Number,
         required: true,
+        min: 1,
     },
     vehicleId: {
         type: mongoose.Schema.Types.ObjectId,

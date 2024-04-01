@@ -1,14 +1,19 @@
 import RouteFromUniversity from '../models/RouteFromUniversity';
 import { routesWithDriverName } from '../libs/driverName';
-import RoutePropertiesFromUniversity from '../models/RoutesProperties'
+import { getAvilableSeats } from '../libs/vehicleService';
+import RoutePropertiesFromUniversity from '../models/RoutesPropertiesFromUniversity'
 
 
 export const createRoute = async (req, res) => {
   try {
-    const { origin, destination, city, description, departureDate, departureTime, availableSeats, vehicleId } = req.body;
+    const token = req.headers.authorization;
+    const {destination, city, description, departureDate, departureTime, availableSeats, vehicleId } = req.body;
 
+    const seats = await getAvilableSeats(vehicleId, availableSeats, token);
+
+      if (seats) return res.status(400).json({ error: 'No hay suficientes asientos disponibles en el vehículo' });
+  
     const newRoute = new RouteFromUniversity({
-      origin,
       destination,
       city,
       description,
