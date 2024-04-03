@@ -4,7 +4,8 @@ import pkg from '../package.json'
 import helmet from "helmet";
 
 import indexRoutes from "./routes/index.routes.js";
-import routeRoutes from "./routes/route.routes.js";
+import routeFromUniversityRoutes from "./routes/routeFromUniversity.routes.js";
+import routeToUniversityRoutes from "./routes/routeToUniversity.routes.js";
 
 
 const app = express()
@@ -20,7 +21,8 @@ app.set("json spaces", 4);
 
 //TODO: add endpoints to express
 app.use('/api/v1', indexRoutes)
-app.use('/api/v1/routes', routeRoutes)
+app.use('/api/v1/routes-from-university', routeFromUniversityRoutes)
+app.use('/api/v1/routes-to-university', routeToUniversityRoutes)
 
 
 export default app;

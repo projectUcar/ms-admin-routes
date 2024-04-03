@@ -1,13 +1,13 @@
 import mongoose from 'mongoose';
 
-const routeSchema = new mongoose.Schema({
+const routeToUniversitySchema = new mongoose.Schema({
     origin: {
         type: String,
         required: true,
     },
     destination: {
         type: String,
-        required: true,
+        default: 'Universidad Pontificia Bolivariana',
     },
     city: {
         type: String,
@@ -27,6 +27,12 @@ const routeSchema = new mongoose.Schema({
     },
     availableSeats: {
         type: Number,
+        required: true,
+        min: 1,
+    },
+    vehicleId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Vehicle',
         required: true,
     },
     driverUserId: {
@@ -58,6 +64,6 @@ const routeSchema = new mongoose.Schema({
     }
 );
 
-const Route = mongoose.model('Route', routeSchema);
+const RouteToUniversity = mongoose.model('routeToUniversity', routeToUniversitySchema);
 
-export default Route;
+export default RouteToUniversity;
