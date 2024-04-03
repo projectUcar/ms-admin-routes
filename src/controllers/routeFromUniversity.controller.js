@@ -57,6 +57,10 @@ export const findRoutesByCity = async (req, res) => {
 
     const routesDriverName = await routesWithDriverName(routes, token);
 
+    if (routesDriverName.length === 0) {
+      res.status(200).json({ message: 'Todavía no hay rutas disponibles para: ', cityName });
+    }
+
     res.status(200).json(routesDriverName);
   } catch (error) {
     console.error('Error al buscar recorridos por ciudad:', error);
@@ -91,6 +95,22 @@ export const getRoutePropertiesFromUniversity = async (req, res) => {
     res.status(200).json(routePropertiesByCity);
   } catch (error) {
     console.error(error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+};
+
+export const getRoutesById = async (req, res) => {
+
+  try {
+    const token = req.headers.authorization;
+    const { routeId } = req.params;
+    const routes = await RouteFromUniversity.find({ _id: routeId } );
+
+    const routesDriverName = await routesWithDriverName(routes, token);
+
+    res.status(200).json(routesDriverName);
+  } catch (error) {
+    console.error('Error al buscar recorridos por id:', error);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
