@@ -1,5 +1,5 @@
 import RouteFromUniversity from '../models/RouteFromUniversity';
-import { routesWithDriverName } from '../libs/driverName';
+import { routesWithDriverName, routesWithVehicle } from '../libs/routeInformation';
 import { getAvilableSeats } from '../libs/vehicleService';
 import RoutePropertiesFromUniversity from '../models/RoutesPropertiesFromUniversity'
 
@@ -36,9 +36,9 @@ export const createRoute = async (req, res) => {
 export const getAllRoutes = async (req, res) => {
   try {
     const token = req.headers.authorization;
-    const routes = await RouteFromUniversity.find();
+    const routes = await RouteFromUniversity.find()
 
-    const driverName = await routesWithDriverName(routes, token);
+    const driverName = await routesInformation(routes, token);
 
     res.status(200).json(driverName);
   } catch (error) {
@@ -55,16 +55,18 @@ export const findRoutesByCity = async (req, res) => {
     // Buscar los recorridos por la ciudad especificada
     const routes = await RouteFromUniversity.find({ city: cityName });
 
-    const routesDriverName = await routesWithDriverName(routes, token);
+    const routesDriverName = await routesInformation(routes, token);
 
     if (routesDriverName.length === 0) {
-      res.status(200).json({ message: 'Todavía no hay rutas disponibles para: ', cityName });
+      res.status(204).json({ message: 'Todavía no hay rutas disponibles para: ', cityName });
+      return;
     }
 
     res.status(200).json(routesDriverName);
   } catch (error) {
     console.error('Error al buscar recorridos por ciudad:', error);
     res.status(500).json({ error: 'Error interno del servidor' });
+    return;
   }
 };
 
@@ -107,8 +109,17 @@ export const getRoutesById = async (req, res) => {
     const routes = await RouteFromUniversity.find({ _id: routeId } );
 
     const routesDriverName = await routesWithDriverName(routes, token);
+    const routesVehicle = await routesWithVehicle(routes[0], token);
 
-    res.status(200).json(routesDriverName);
+    const routeInfo = {};
+    routeInfo.route = routesDriverName[0];
+    routeInfo.vehicle = routesVehicle;
+    
+    if (routeInfo.length === 0) {
+      res.status(204).json({ message: 'No existe la ruta proporcionada'});
+      return;
+    }
+    res.status(200).json(routeInfo);
   } catch (error) {
     console.error('Error al buscar recorridos por id:', error);
     res.status(500).json({ error: 'Error interno del servidor' });
