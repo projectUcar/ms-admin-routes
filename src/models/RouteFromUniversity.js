@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 const routeFromUniversitySchema = new mongoose.Schema({
     origin: {
         type: String,
-        default: 'Universidad Pontificia Bolivariana',
+        default: 'Universidad Pontificia Bolivariana Seccional Bucaramanga',
     },
     destination: {
         type: String,
@@ -54,7 +54,7 @@ const routeFromUniversitySchema = new mongoose.Schema({
     ],
     status: {
         type: String,
-        enum: ['created', 'saved', 'closed', 'modified', 'deleted', 'expired'],
+        enum: ['created', 'closed', 'modified', 'deleted'],
         default: 'created',
     },
 },

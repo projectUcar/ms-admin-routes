@@ -7,7 +7,7 @@ const routeToUniversitySchema = new mongoose.Schema({
     },
     destination: {
         type: String,
-        default: 'Universidad Pontificia Bolivariana',
+        default: 'Universidad Pontificia Bolivariana Seccional Bucaramanga',
     },
     city: {
         type: String,
@@ -54,7 +54,7 @@ const routeToUniversitySchema = new mongoose.Schema({
     ],
     status: {
         type: String,
-        enum: ['created', 'saved', 'closed', 'modified', 'deleted', 'expired'],
+        enum: ['created', 'closed', 'modified', 'deleted'],
         default: 'created',
     },
 },

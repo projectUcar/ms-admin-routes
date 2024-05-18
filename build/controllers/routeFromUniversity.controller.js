@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.getRoutesById = exports.getRoutePropertiesFromUniversity = exports.getAllRoutes = exports.findRoutesByCity = exports.createRoute = void 0;
 var _RouteFromUniversity = _interopRequireDefault(require("../models/RouteFromUniversity"));
-var _driverName = require("../libs/driverName");
+var _routeInformation = require("../libs/routeInformation");
 var _vehicleService = require("../libs/vehicleService");
 var _RoutesPropertiesFromUniversity = _interopRequireDefault(require("../models/RoutesPropertiesFromUniversity"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
@@ -91,7 +91,7 @@ var getAllRoutes = exports.getAllRoutes = /*#__PURE__*/function () {
         case 4:
           routes = _context2.sent;
           _context2.next = 7;
-          return (0, _driverName.routesWithDriverName)(routes, token);
+          return routesInformation(routes, token);
         case 7:
           driverName = _context2.sent;
           res.status(200).json(driverName);
@@ -130,30 +130,35 @@ var findRoutesByCity = exports.findRoutesByCity = /*#__PURE__*/function () {
         case 5:
           routes = _context3.sent;
           _context3.next = 8;
-          return (0, _driverName.routesWithDriverName)(routes, token);
+          return routesInformation(routes, token);
         case 8:
           routesDriverName = _context3.sent;
-          if (routesDriverName.length === 0) {
-            res.status(200).json({
-              message: 'Todavía no hay rutas disponibles para: ',
-              cityName: cityName
-            });
+          if (!(routesDriverName.length === 0)) {
+            _context3.next = 12;
+            break;
           }
+          res.status(204).json({
+            message: 'Todavía no hay rutas disponibles para: ',
+            cityName: cityName
+          });
+          return _context3.abrupt("return");
+        case 12:
           res.status(200).json(routesDriverName);
-          _context3.next = 17;
+          _context3.next = 20;
           break;
-        case 13:
-          _context3.prev = 13;
+        case 15:
+          _context3.prev = 15;
           _context3.t0 = _context3["catch"](0);
           console.error('Error al buscar recorridos por ciudad:', _context3.t0);
           res.status(500).json({
             error: 'Error interno del servidor'
           });
-        case 17:
+          return _context3.abrupt("return");
+        case 20:
         case "end":
           return _context3.stop();
       }
-    }, _callee3, null, [[0, 13]]);
+    }, _callee3, null, [[0, 15]]);
   }));
   return function findRoutesByCity(_x5, _x6) {
     return _ref3.apply(this, arguments);
@@ -247,7 +252,7 @@ var getRoutePropertiesFromUniversity = exports.getRoutePropertiesFromUniversity 
 }();
 var getRoutesById = exports.getRoutesById = /*#__PURE__*/function () {
   var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(req, res) {
-    var token, routeId, routes, routesDriverName;
+    var token, routeId, routes, routesDriverName, routesVehicle, routeInfo;
     return _regeneratorRuntime().wrap(function _callee5$(_context6) {
       while (1) switch (_context6.prev = _context6.next) {
         case 0:
@@ -261,24 +266,40 @@ var getRoutesById = exports.getRoutesById = /*#__PURE__*/function () {
         case 5:
           routes = _context6.sent;
           _context6.next = 8;
-          return (0, _driverName.routesWithDriverName)(routes, token);
+          return (0, _routeInformation.routesWithDriverName)(routes, token);
         case 8:
           routesDriverName = _context6.sent;
-          res.status(200).json(routesDriverName);
-          _context6.next = 16;
+          _context6.next = 11;
+          return (0, _routeInformation.routesWithVehicle)(routes[0], token);
+        case 11:
+          routesVehicle = _context6.sent;
+          routeInfo = {};
+          routeInfo.route = routesDriverName[0];
+          routeInfo.vehicle = routesVehicle;
+          if (!(routeInfo.length === 0)) {
+            _context6.next = 18;
+            break;
+          }
+          res.status(204).json({
+            message: 'No existe la ruta proporcionada'
+          });
+          return _context6.abrupt("return");
+        case 18:
+          res.status(200).json(routeInfo);
+          _context6.next = 25;
           break;
-        case 12:
-          _context6.prev = 12;
+        case 21:
+          _context6.prev = 21;
           _context6.t0 = _context6["catch"](0);
           console.error('Error al buscar recorridos por id:', _context6.t0);
           res.status(500).json({
             error: 'Error interno del servidor'
           });
-        case 16:
+        case 25:
         case "end":
           return _context6.stop();
       }
-    }, _callee5, null, [[0, 12]]);
+    }, _callee5, null, [[0, 21]]);
   }));
   return function getRoutesById(_x9, _x10) {
     return _ref5.apply(this, arguments);
