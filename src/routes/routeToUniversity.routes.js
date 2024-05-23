@@ -10,5 +10,6 @@ router.get('/get-routes', authenticateUser, routeToUvnicersityCtr.getAllRoutes);
 router.get('/city/:cityName', authenticateUser, routeToUvnicersityCtr.findRoutesByCity);
 router.get('/properties', authenticateUser, routeToUvnicersityCtr.getRoutePropertiesFromUniversity);
 router.get('/id/:routeId', authenticateUser, routeToUvnicersityCtr.getRoutesById);
+router.get('/my-routes/:driverUserId', authenticateUser, routeToUvnicersityCtr.getMyRoutes);
 
 export default router;

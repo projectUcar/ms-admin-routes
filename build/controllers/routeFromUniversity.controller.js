@@ -4,7 +4,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.getRoutesById = exports.getRoutePropertiesFromUniversity = exports.getAllRoutes = exports.findRoutesByCity = exports.createRoute = void 0;
+exports.getRoutesById = exports.getRoutePropertiesFromUniversity = exports.getMyRoutes = exports.getAllRoutes = exports.findRoutesByCity = exports.createRoute = void 0;
 var _RouteFromUniversity = _interopRequireDefault(require("../models/RouteFromUniversity"));
 var _routeInformation = require("../libs/routeInformation");
 var _vehicleService = require("../libs/vehicleService");
@@ -91,7 +91,7 @@ var getAllRoutes = exports.getAllRoutes = /*#__PURE__*/function () {
         case 4:
           routes = _context2.sent;
           _context2.next = 7;
-          return routesInformation(routes, token);
+          return (0, _routeInformation.routesWithDriverName)(routes, token);
         case 7:
           driverName = _context2.sent;
           res.status(200).json(driverName);
@@ -130,7 +130,7 @@ var findRoutesByCity = exports.findRoutesByCity = /*#__PURE__*/function () {
         case 5:
           routes = _context3.sent;
           _context3.next = 8;
-          return routesInformation(routes, token);
+          return (0, _routeInformation.routesWithDriverName)(routes, token);
         case 8:
           routesDriverName = _context3.sent;
           if (!(routesDriverName.length === 0)) {
@@ -252,7 +252,7 @@ var getRoutePropertiesFromUniversity = exports.getRoutePropertiesFromUniversity 
 }();
 var getRoutesById = exports.getRoutesById = /*#__PURE__*/function () {
   var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(req, res) {
-    var token, routeId, routes, routesDriverName, routesVehicle, routeInfo;
+    var token, routeId, route, routesDriverName, routesVehicle, routeInfo;
     return _regeneratorRuntime().wrap(function _callee5$(_context6) {
       while (1) switch (_context6.prev = _context6.next) {
         case 0:
@@ -264,13 +264,13 @@ var getRoutesById = exports.getRoutesById = /*#__PURE__*/function () {
             _id: routeId
           });
         case 5:
-          routes = _context6.sent;
+          route = _context6.sent;
           _context6.next = 8;
-          return (0, _routeInformation.routesWithDriverName)(routes, token);
+          return (0, _routeInformation.routesWithDriverName)(route, token);
         case 8:
           routesDriverName = _context6.sent;
           _context6.next = 11;
-          return (0, _routeInformation.routesWithVehicle)(routes[0], token);
+          return (0, _routeInformation.routesWithVehicle)(route[0], token);
         case 11:
           routesVehicle = _context6.sent;
           routeInfo = {};
@@ -303,5 +303,77 @@ var getRoutesById = exports.getRoutesById = /*#__PURE__*/function () {
   }));
   return function getRoutesById(_x9, _x10) {
     return _ref5.apply(this, arguments);
+  };
+}();
+var getMyRoutes = exports.getMyRoutes = /*#__PURE__*/function () {
+  var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(req, res) {
+    var token, driverUserId, routes, routeInfo;
+    return _regeneratorRuntime().wrap(function _callee7$(_context8) {
+      while (1) switch (_context8.prev = _context8.next) {
+        case 0:
+          _context8.prev = 0;
+          token = req.headers.authorization;
+          driverUserId = req.params.driverUserId;
+          _context8.next = 5;
+          return _RouteFromUniversity["default"].find({
+            driverUserId: driverUserId
+          });
+        case 5:
+          routes = _context8.sent;
+          _context8.next = 8;
+          return Promise.all(routes.map( /*#__PURE__*/function () {
+            var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(route) {
+              var vehicleInfo, modifiedRouteInfo;
+              return _regeneratorRuntime().wrap(function _callee6$(_context7) {
+                while (1) switch (_context7.prev = _context7.next) {
+                  case 0:
+                    _context7.next = 2;
+                    return (0, _routeInformation.routesWithVehicle)(route, token);
+                  case 2:
+                    vehicleInfo = _context7.sent;
+                    modifiedRouteInfo = {
+                      route: route
+                    };
+                    modifiedRouteInfo.vehicle = vehicleInfo;
+                    return _context7.abrupt("return", modifiedRouteInfo);
+                  case 6:
+                  case "end":
+                    return _context7.stop();
+                }
+              }, _callee6);
+            }));
+            return function (_x13) {
+              return _ref7.apply(this, arguments);
+            };
+          }()));
+        case 8:
+          routeInfo = _context8.sent;
+          if (!(routeInfo.length === 0)) {
+            _context8.next = 12;
+            break;
+          }
+          res.status(204).json({
+            message: 'No existe la ruta proporcionada'
+          });
+          return _context8.abrupt("return");
+        case 12:
+          res.status(200).json(routeInfo);
+          _context8.next = 19;
+          break;
+        case 15:
+          _context8.prev = 15;
+          _context8.t0 = _context8["catch"](0);
+          console.error('Error al buscar mis recorridos:', _context8.t0);
+          res.status(500).json({
+            error: 'Error interno del servidor'
+          });
+        case 19:
+        case "end":
+          return _context8.stop();
+      }
+    }, _callee7, null, [[0, 15]]);
+  }));
+  return function getMyRoutes(_x11, _x12) {
+    return _ref6.apply(this, arguments);
   };
 }();

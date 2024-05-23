@@ -6,9 +6,9 @@ import helmet from "helmet";
 import indexRoutes from "./routes/index.routes.js";
 import routeFromUniversityRoutes from "./routes/routeFromUniversity.routes.js";
 import routeToUniversityRoutes from "./routes/routeToUniversity.routes.js";
+import requestSeat from './routes/requestSeat.routes.js';
 
-
-const app = express()
+const app = express();
 
 app.set('pkg', pkg)
 
@@ -23,6 +23,7 @@ app.set("json spaces", 4);
 app.use('/api/v1', indexRoutes)
 app.use('/api/v1/routes-from-university', routeFromUniversityRoutes)
 app.use('/api/v1/routes-to-university', routeToUniversityRoutes)
+app.use('/api/v1/request-seat', requestSeat)
 
 
 export default app;

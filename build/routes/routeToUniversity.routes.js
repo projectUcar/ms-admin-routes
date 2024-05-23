@@ -18,4 +18,5 @@ router.get('/get-routes', _authMiddleware.authenticateUser, routeToUvnicersityCt
 router.get('/city/:cityName', _authMiddleware.authenticateUser, routeToUvnicersityCtr.findRoutesByCity);
 router.get('/properties', _authMiddleware.authenticateUser, routeToUvnicersityCtr.getRoutePropertiesFromUniversity);
 router.get('/id/:routeId', _authMiddleware.authenticateUser, routeToUvnicersityCtr.getRoutesById);
+router.get('/my-routes/:driverUserId', _authMiddleware.authenticateUser, routeToUvnicersityCtr.getMyRoutes);
 var _default = exports["default"] = router;
