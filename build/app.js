@@ -11,6 +11,7 @@ var _helmet = _interopRequireDefault(require("helmet"));
 var _indexRoutes = _interopRequireDefault(require("./routes/index.routes.js"));
 var _routeFromUniversityRoutes = _interopRequireDefault(require("./routes/routeFromUniversity.routes.js"));
 var _routeToUniversityRoutes = _interopRequireDefault(require("./routes/routeToUniversity.routes.js"));
+var _requestSeatRoutes = _interopRequireDefault(require("./routes/requestSeat.routes.js"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 var app = (0, _express["default"])();
 app.set('pkg', _package["default"]);
@@ -26,4 +27,5 @@ app.set("json spaces", 4);
 app.use('/api/v1', _indexRoutes["default"]);
 app.use('/api/v1/routes-from-university', _routeFromUniversityRoutes["default"]);
 app.use('/api/v1/routes-to-university', _routeToUniversityRoutes["default"]);
+app.use('/api/v1/request-seat', _requestSeatRoutes["default"]);
 var _default = exports["default"] = app;

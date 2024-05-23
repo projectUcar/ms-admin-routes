@@ -24,7 +24,6 @@ export const createRoute = async (req, res) => {
       driverUserId: req.user.id,
     });
 
-
     const savedRoute = await newRoute.save();
     res.status(201).json({ savedRoute, meessage: "¡Ruta creada exitosamente!" });
   } catch (error) {
@@ -38,7 +37,7 @@ export const getAllRoutes = async (req, res) => {
     const token = req.headers.authorization;
     const routes = await RouteFromUniversity.find()
 
-    const driverName = await routesInformation(routes, token);
+    const driverName = await routesWithDriverName(routes, token);
 
     res.status(200).json(driverName);
   } catch (error) {
@@ -55,7 +54,7 @@ export const findRoutesByCity = async (req, res) => {
     // Buscar los recorridos por la ciudad especificada
     const routes = await RouteFromUniversity.find({ city: cityName });
 
-    const routesDriverName = await routesInformation(routes, token);
+    const routesDriverName = await routesWithDriverName(routes, token);
 
     if (routesDriverName.length === 0) {
       res.status(204).json({ message: 'Todavía no hay rutas disponibles para: ', cityName });
@@ -106,10 +105,10 @@ export const getRoutesById = async (req, res) => {
   try {
     const token = req.headers.authorization;
     const { routeId } = req.params;
-    const routes = await RouteFromUniversity.find({ _id: routeId } );
+    const route = await RouteFromUniversity.find({ _id: routeId } );
 
-    const routesDriverName = await routesWithDriverName(routes, token);
-    const routesVehicle = await routesWithVehicle(routes[0], token);
+    const routesDriverName = await routesWithDriverName(route, token);
+    const routesVehicle = await routesWithVehicle(route[0], token);
 
     const routeInfo = {};
     routeInfo.route = routesDriverName[0];
@@ -122,6 +121,31 @@ export const getRoutesById = async (req, res) => {
     res.status(200).json(routeInfo);
   } catch (error) {
     console.error('Error al buscar recorridos por id:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+};
+
+export const getMyRoutes = async (req, res) => {
+
+  try {
+    const token = req.headers.authorization;
+    const { driverUserId } = req.params;
+    const routes = await RouteFromUniversity.find( { driverUserId } );
+
+    const routeInfo = await Promise.all(routes.map(async (route) => { 
+        const vehicleInfo = await routesWithVehicle(route, token);
+        const modifiedRouteInfo = { route };
+        modifiedRouteInfo.vehicle = vehicleInfo;
+        return modifiedRouteInfo;
+    }));
+    
+    if (routeInfo.length === 0) {
+      res.status(204).json({ message: 'No existe la ruta proporcionada'});
+      return;
+    }
+    res.status(200).json(routeInfo);
+  } catch (error) {
+    console.error('Error al buscar mis recorridos:', error);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 };

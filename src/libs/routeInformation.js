@@ -1,3 +1,5 @@
+import RouteFromUniversity from '../models/RouteFromUniversity.js';
+import RouteToUniversity from '../models/RouteToUniversity.js';
 import VehicleInformation from '../models/VehicleInformation.js';
 import { getUserById } from './userService.js'; // Importa la función para obtener información del conductor
 import { getVehicleById } from './vehicleService.js';
@@ -19,6 +21,7 @@ export async function routesWithDriverName(routes, token) {
       throw new Error('Error al obtener rutas con nombres de conductores');
     }
   };
+
 export async function routesWithVehicle(routes, token) {
     try {
 
