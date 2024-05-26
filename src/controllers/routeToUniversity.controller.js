@@ -107,6 +107,11 @@ export const getRoutesById = async (req, res) => {
     const { routeId } = req.params;
     const route = await RouteToUniversity.find( { _id: routeId } );
 
+    if (route.length === 0) {
+      res.status(204).json({ message: 'No existe la ruta proporcionada'});
+      return;
+    }
+
     const routesDriverName = await routesWithDriverName(route, token);
     const routesVehicle = await routesWithVehicle(route[0], token);
 
@@ -114,10 +119,6 @@ export const getRoutesById = async (req, res) => {
     routeInfo.route = routesDriverName[0];
     routeInfo.vehicle = routesVehicle;
     
-    if (routeInfo.length === 0) {
-      res.status(204).json({ message: 'No existe la ruta proporcionada'});
-      return;
-    }
     res.status(200).json(routeInfo);
   } catch (error) {
     console.error('Error al buscar recorridos por id:', error);
