@@ -1,7 +1,7 @@
 version: "3.9"
 
 services:
-  ms_auth: 
+  ms_route-tes: 
     build:
       context: .
       dockerfile: Dockerfile

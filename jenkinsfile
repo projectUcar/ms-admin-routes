@@ -8,8 +8,6 @@ pipeline {
     parameters {
         string(name: 'container_name', defaultValue: 'ms_routes-test', description: 'Nombre del contenedor de docker.')
         string(name: 'image_name', defaultValue: 'ms_route-test', description: 'Nombre de la imagen de docker.')
-        string(name: 'tag_image', defaultValue: 'lts', description: 'Tag de la imagen del microservicio.')
-        string(name: 'container_port', defaultValue: '5000', description: 'Puerto que usa el contenedor')
     }
 
     stages {
@@ -33,7 +31,7 @@ pipeline {
                 }
                 sh 'npm run build'
                 // Descargar archivo de entorno
-                withCredentials([file(credentialsId: 'SECRET_FILE_AUTH', variable: 'SECRET_FILE')]) {
+                withCredentials([file(credentialsId: 'SECRET_FILE_ROUTES', variable: 'SECRET_FILE')]) {
                     sh 'cp $SECRET_FILE ./variables.env'
                 }
                 
@@ -43,7 +41,7 @@ pipeline {
 
         stage('deploy') {
             steps {
-                withCredentials([file(credentialsId: 'SECRET_FILE_AUTH', variable: 'SECRET_FILE')]) {
+                withCredentials([file(credentialsId: 'SECRET_FILE_ROUTES', variable: 'SECRET_FILE')]) {
                     sh '''
                         export SECRET_FILE=./variables.env
                         docker-compose --env-file $SECRET_FILE up -d
