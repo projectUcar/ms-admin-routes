@@ -39,8 +39,8 @@ const routeFromUniversitySchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
     },
-    passengers: [
-        {
+    passengers: {
+        type: [{
             user: {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'User',
@@ -50,8 +50,9 @@ const routeFromUniversitySchema = new mongoose.Schema({
                 enum: ['pending', 'approved', 'rejected'],
                 default: 'pending',
             },
-        },
-    ],
+        }],
+        default: [],
+    },
     status: {
         type: String,
         enum: ['created', 'closed', 'modified', 'deleted'],
