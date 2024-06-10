@@ -1,0 +1,15 @@
+version: "3.9"
+
+services:
+  ms_auth: 
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ms_routes-test
+    env_file:
+      - ./variables.env
+    ports:
+      - "5000:5000"
+      - "5672:5672"
+    command: npm start
+ 
