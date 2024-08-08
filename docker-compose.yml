@@ -1,4 +1,4 @@
-version: "3.9"
+version: "3.3"
 
 services:
   ms_route-tes: 
@@ -12,4 +12,10 @@ services:
       - "5000:5000"
       - "5673:5673"
     command: npm start
+    networks:
+      - ucar-network
+
+networks:
+  ucar-network:
+    external: true
  
