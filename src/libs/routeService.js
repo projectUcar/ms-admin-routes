@@ -40,7 +40,7 @@ export const addPassangerToRoute = async (collection, idRoute, idUser) => {
         const route = await collectionRoute.findById(idRoute).exec();
 
         if (!route) {
-            return 'Ruta no encontrada';
+            throw new Error('Ruta no encontrada');
         }
 
         if (route.availableSeats <= 0) {

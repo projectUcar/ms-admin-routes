@@ -90,7 +90,7 @@ export const findRoutesByCity = async (req, res) => {
 export const getRoutePropertiesFromUniversity = async (req, res) => {
   try {
     const routes = await RouteToUniversity.find();
-
+    const filteredRoutes = filterRoutesByTodayAndTomorrow(routes);
     const uniqueCities = [...new Set(routes.map(route => route.city))];
 
     const routePropertiesByCity = [];
