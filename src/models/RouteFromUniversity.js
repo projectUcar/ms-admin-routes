@@ -27,7 +27,6 @@ const routeFromUniversitySchema = new mongoose.Schema({
     },
     departureDateTime: {
         type: Date,
-        required: true,
     },
     availableSeats: {
         type: Number,

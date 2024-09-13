@@ -8,7 +8,7 @@ const updateRouteStatus = async () => {
     // Actualizar rutas desde la universidad
     const routesFromUniversity = await RouteFromUniversity.find();
     for (let route of routesFromUniversity) {
-      if (hasDatePassed(route.departureDate)) {
+      if (hasDatePassed(route.departureDateTime)) {
         route.status = 'closed';
         await route.save();
       }
@@ -17,8 +17,8 @@ const updateRouteStatus = async () => {
     // Actualizar rutas hacia la universidad
     const routesToUniversity = await RouteToUniversity.find();
     for (let route of routesToUniversity) {
-      if (hasDatePassed(route.departureDate)) {
-        route.status = 'completed';
+      if (hasDatePassed(route.departureDateTime)) {
+        route.status = 'close';
         await route.save();
       }
     }
