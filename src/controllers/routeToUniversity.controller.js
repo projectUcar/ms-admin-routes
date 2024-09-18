@@ -8,7 +8,7 @@ import { filterRoutesByTodayAndTomorrow } from '../libs/dateUtils';
 export const createRoute = async (req, res) => {
   try {
     const token = req.headers.authorization;
-    const { destination, city, description, departureDate, departureTime, availableSeats, vehicleId } = req.body;
+    const { destination: origin, city, description, departureDate, departureTime, availableSeats, vehicleId } = req.body;
 
     const seats = await getAvilableSeats(vehicleId, availableSeats, token);
 
@@ -18,7 +18,7 @@ export const createRoute = async (req, res) => {
     const departureDateTime = moment(`${departureDate} ${departureTime}`, 'YYYY-MM-DD h:mm A').toDate();
 
     const newRoute = new RouteToUniversity({
-      destination,
+      origin,
       city,
       description,
       departureDate,
